@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Camera Upload to Drive</title>
+</head>
+<body>
+  <h1>Take a Photo</h1>
+  <video id="camera" autoplay playsinline width="300"></video>
+  <br>
+  <button onclick="takePhoto()">Capture & Upload</button>
+  <canvas id="canvas" style="display:none;"></canvas>
+
+  <script>
+    const video = document.getElementById('camera');
+    const canvas = document.getElementById('canvas');
+    const driveUploadUrl = 'https://script.google.com/macros/s/AKfycbzUWV5e3GT61caunfn9g17r-3_CZjosC4JU_yKUXe_PxnXDe3_jTpfrPbXalEshEmA8/exec'; 
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => video.srcObject = stream)
+      .catch(err => alert('Camera access denied'));
+
+    function takePhoto() {
+      const ctx = canvas.getContext('2d');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      ctx.drawImage(video, 0, 0);
+      const dataUrl = canvas.toDataURL('image/jpeg');
+      const base64Image = dataUrl.split(',')[1];
+
+      fetch(driveUploadUrl, {
+        method: 'POST',
+        body: new URLSearchParams({
+          image: base64Image,
+          filename: 'photo_' + Date.now() + '.jpg'
+        })
+      })
+      .then(res => res.text())
+      .then(txt => alert('Upload successful'))
+      .catch(err => alert('Upload failed'));
+    }
+  </script>
+</body>
+</html>
