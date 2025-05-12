@@ -3,10 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>Camera Upload to Drive</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    video, canvas {
+      width: 100%;
+      max-width: 400px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
   <h1>Take a Photo</h1>
-  <video id="camera" autoplay playsinline width="300"></video>
+  <video id="camera" autoplay playsinline></video>
   <br>
   <button onclick="takePhoto()">Capture & Upload</button>
   <canvas id="canvas" style="display:none;"></canvas>
@@ -16,9 +27,17 @@
     const canvas = document.getElementById('canvas');
     const driveUploadUrl = 'https://script.google.com/macros/s/AKfycbzUWV5e3GT61caunfn9g17r-3_CZjosC4JU_yKUXe_PxnXDe3_jTpfrPbXalEshEmA8/exec'; 
 
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => video.srcObject = stream)
-      .catch(err => alert('Camera access denied'));
+    // Request rear-facing camera
+    navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { exact: "environment" } },
+      audio: false
+    })
+    .then(stream => {
+      video.srcObject = stream;
+    })
+    .catch(err => {
+      alert('Error accessing camera: ' + err.message);
+    });
 
     function takePhoto() {
       const ctx = canvas.getContext('2d');
@@ -37,8 +56,9 @@
       })
       .then(res => res.text())
       .then(txt => alert('Upload successful'))
-      .catch(err => alert('Upload failed'));
+      .catch(err => alert('Upload failed: ' + err.message));
     }
   </script>
 </body>
 </html>
+
