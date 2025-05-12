@@ -4,30 +4,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Camera Upload</title>
+  <title>Send a Photo to Nikolas 🎉</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Arial', sans-serif;
-      background: #f0f4f8;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f7faff;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
       min-height: 100vh;
     }
 
     h1 {
       text-align: center;
       margin-top: 2rem;
-      color: #333;
+      color: #2c3e50;
+      font-size: 2.2rem;
+    }
+
+    p.description {
+      text-align: center;
+      max-width: 600px;
+      margin: 1rem;
+      font-size: 1.1rem;
+      color: #34495e;
+      padding: 0 1rem;
+    }
+
+    ol.instructions {
+      text-align: left;
+      max-width: 500px;
+      color: #2c3e50;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      padding: 0 1.5rem;
     }
 
     video {
       margin-top: 2rem;
       border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       max-width: 90vw;
       height: auto;
     }
@@ -35,41 +53,62 @@
     button {
       margin: 2rem 0;
       padding: 1rem 2rem;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       font-weight: bold;
       color: white;
-      background-color: #007BFF;
+      background-color: #ff6f61;
       border: none;
       border-radius: 12px;
       cursor: pointer;
-      transition: background 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s ease;
     }
 
     button:hover {
-      background-color: #0056b3;
+      background-color: #e8564a;
     }
 
     canvas {
       display: none;
     }
+
+    .footer {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
   </style>
 </head>
 <body>
-    <h1>Upload a Photo</h1>
+  <h1>🎉 Send a Photo to Nikolas!</h1>
   <p class="description">
-    This tool lets you take a picture using your phone’s camera and automatically upload it to a shared folder.
-    Just point your camera, press the button, and your photo will be sent — no app install needed.
+    It’s Nikolas’ birthday, and he wants to remember this awesome day with you!
+    Use this simple camera tool to take a photo — your smile, your moment, your memory —
+    and it will be sent directly and privately to Nikolas’ Google Drive 💾🎂.
   </p>
+
+  <p class="description"><strong>Here’s how it works:</strong></p>
+  <ol class="instructions">
+    <li>Make sure you’re ready — strike a pose or gather your group!</li>
+    <li>Your phone’s camera will open automatically (rear camera if available).</li>
+    <li>Tap the big red button below to take and send your photo.</li>
+    <li>That’s it! Your picture is now part of Nikolas’ special day 🎁.</li>
+  </ol>
+
   <video id="camera" autoplay playsinline></video>
   <button onclick="takePhoto()">📸 Capture & Upload</button>
   <canvas id="canvas"></canvas>
+
+  <div class="footer">
+    Thank you for making Nikolas’ day brighter! ❤️
+  </div>
 
   <script>
     const video = document.getElementById('camera');
     const canvas = document.getElementById('canvas');
     const driveUploadUrl = 'https://script.google.com/macros/s/AKfycbzUWV5e3GT61caunfn9g17r-3_CZjosC4JU_yKUXe_PxnXDe3_jTpfrPbXalEshEmA8/exec'; 
 
-    // Ask for rear camera
     navigator.mediaDevices.getUserMedia({
       video: { facingMode: "environment" },
       audio: false
@@ -93,11 +132,11 @@
         method: 'POST',
         body: new URLSearchParams({
           image: base64Image,
-          filename: 'photo_' + Date.now() + '.jpg'
+          filename: 'birthday_photo_' + Date.now() + '.jpg'
         })
       })
       .then(res => res.text())
-      .then(txt => alert('✅ Upload successful!'))
+      .then(txt => alert('🎉 Photo sent to Nikolas! Thank you!'))
       .catch(err => alert('❌ Upload failed: ' + err.message));
     }
   </script>
