@@ -1,42 +1,80 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Camera Upload to Drive</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Camera Upload</title>
   <style>
-    video, canvas {
-      width: 100%;
-      max-width: 400px;
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
     }
+
+    h1 {
+      text-align: center;
+      margin-top: 2rem;
+      color: #333;
+    }
+
+    video {
+      margin-top: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      max-width: 90vw;
+      height: auto;
+    }
+
     button {
-      padding: 10px 20px;
-      font-size: 18px;
+      margin: 2rem 0;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: white;
+      background-color: #007BFF;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    canvas {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h1>Take a Photo</h1>
+  <h1>Capture & Upload to Drive</h1>
   <video id="camera" autoplay playsinline></video>
-  <br>
-  <button onclick="takePhoto()">Capture & Upload</button>
-  <canvas id="canvas" style="display:none;"></canvas>
+  <button onclick="takePhoto()">📸 Capture & Upload</button>
+  <canvas id="canvas"></canvas>
 
   <script>
     const video = document.getElementById('camera');
     const canvas = document.getElementById('canvas');
     const driveUploadUrl = 'https://script.google.com/macros/s/AKfycbzUWV5e3GT61caunfn9g17r-3_CZjosC4JU_yKUXe_PxnXDe3_jTpfrPbXalEshEmA8/exec'; 
 
-    // Request rear-facing camera
+    // Ask for rear camera
     navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { exact: "environment" } },
+      video: { facingMode: "environment" },
       audio: false
     })
     .then(stream => {
       video.srcObject = stream;
     })
     .catch(err => {
-      alert('Error accessing camera: ' + err.message);
+      alert('Camera error: ' + err.message);
     });
 
     function takePhoto() {
@@ -55,10 +93,9 @@
         })
       })
       .then(res => res.text())
-      .then(txt => alert('Upload successful'))
-      .catch(err => alert('Upload failed: ' + err.message));
+      .then(txt => alert('✅ Upload successful!'))
+      .catch(err => alert('❌ Upload failed: ' + err.message));
     }
   </script>
 </body>
 </html>
-
