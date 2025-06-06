@@ -163,7 +163,9 @@
     const driveUploadUrl = 'https://script.google.com/macros/s/AKfycbzUWV5e3GT61caunfn9g17r-3_CZjosC4JU_yKUXe_PxnXDe3_jTpfrPbXalEshEmA8/exec'; 
 
     navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" },
+      video: { facingMode: "environment",
+      width: { ideal: 4096 },
+       },
       audio: false
     })
     .then(stream => {
